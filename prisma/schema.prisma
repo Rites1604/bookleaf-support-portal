@@ -1,0 +1,178 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  AUTHOR
+  ADMIN
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum TicketCategory {
+  UNCLASSIFIED
+  ROYALTY_PAYMENTS
+  ISBN_METADATA
+  PRINTING_QUALITY
+  DISTRIBUTION_AVAILABILITY
+  BOOK_STATUS_PRODUCTION
+  GENERAL_INQUIRY
+}
+
+enum TicketPriority {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+}
+
+/// Who set a ticket's category/priority. Lets admins see what still needs a human look.
+enum LabelSource {
+  PENDING
+  AI
+  FALLBACK
+  ADMIN
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         Role
+  createdAt    DateTime @default(now())
+
+  author          Author?
+  assignedTickets Ticket[]        @relation("Assignee")
+  messages        TicketMessage[]
+}
+
+model Author {
+  id         String   @id @default(cuid())
+  authorCode String   @unique // e.g. AUTH001 from the source dataset
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  phone      String?
+  city       String?
+  joinedDate DateTime @db.Date
+
+  books   Book[]
+  tickets Ticket[]
+}
+
+model Book {
+  id              String    @id @default(cuid())
+  bookCode        String    @unique // e.g. BK001
+  authorId        String
+  author          Author    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  title           String
+  isbn            String
+  genre           String
+  /// Free text from the dataset: "Published & Live" or "In Production - <stage>"
+  status          String
+  publicationDate DateTime? @db.Date
+  // Money is stored in whole rupees, matching the dataset.
+  mrp             Int?
+  royaltyPerCopy  Int?
+  copiesSold      Int       @default(0)
+  royaltyEarned   Int       @default(0)
+  royaltyPaid     Int       @default(0)
+  royaltyPending  Int       @default(0)
+  lastPayoutDate  DateTime? @db.Date
+  printPartner    String?
+  availableOn     String[]
+
+  tickets Ticket[]
+
+  @@index([authorId])
+}
+
+model Ticket {
+  id             String         @id @default(cuid())
+  authorId       String
+  author         Author         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  bookId         String?
+  book           Book?          @relation(fields: [bookId], references: [id], onDelete: SetNull)
+  subject        String
+  description    String
+  attachmentName String?
+  status         TicketStatus   @default(OPEN)
+  category       TicketCategory @default(UNCLASSIFIED)
+  priority       TicketPriority @default(MEDIUM)
+  categorySource LabelSource    @default(PENDING)
+  prioritySource LabelSource    @default(PENDING)
+  aiConfidence   Float?
+  aiReasoning    String?
+  assigneeId     String?
+  assignee       User?          @relation("Assignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  firstResponseAt DateTime?
+  resolvedAt     DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  messages TicketMessage[]
+  drafts   AiDraft[]
+
+  @@index([status, priority, createdAt])
+  @@index([authorId, createdAt])
+}
+
+model TicketMessage {
+  id           String   @id @default(cuid())
+  ticketId     String
+  ticket       Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  senderId     String
+  sender       User     @relation(fields: [senderId], references: [id])
+  body         String
+  /// Internal notes are only ever returned to admins.
+  isInternal   Boolean  @default(false)
+  /// True when the admin started from an AI draft; aiEdited records whether they changed it.
+  fromAiDraft  Boolean  @default(false)
+  aiEdited     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  @@index([ticketId, createdAt])
+}
+
+/// Cached AI drafts plus a usage ledger for every AI call.
+model AiDraft {
+  id            String   @id @default(cuid())
+  ticketId      String
+  ticket        Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  body          String
+  model         String
+  promptVersion String
+  /// Hash of the inputs the draft was built from. A new author message changes it and invalidates the cache.
+  contextHash   String
+  createdAt     DateTime @default(now())
+
+  @@index([ticketId, createdAt])
+}
+
+/// One row per LLM call, for cost tracking.
+model AiUsage {
+  id           String   @id @default(cuid())
+  ticketId     String?
+  task         String // "classify" | "draft"
+  model        String
+  inputTokens  Int
+  outputTokens Int
+  cachedTokens Int      @default(0)
+  latencyMs    Int
+  success      Boolean
+  errorCode    String?
+  createdAt    DateTime @default(now())
+
+  @@index([createdAt])
+}
