@@ -148,6 +148,8 @@ Errors are always `{ "error": { "code", "message", "details"? } }` with 401, 403
 
 ## Deploying
 
+Step-by-step guide: [DEPLOY.md](DEPLOY.md).
+
 The app is set up for **Vercel + Neon** (any Node host with Postgres works):
 
 1. Create a Neon database and copy the pooled and direct connection strings.
