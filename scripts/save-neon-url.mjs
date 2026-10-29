@@ -17,16 +17,37 @@ function fail(msg) {
   process.exit(1);
 }
 
-let raw;
-try {
-  raw = execSync("pbpaste", { encoding: "utf8" });
-} catch {
-  fail("Could not read the clipboard (this script uses macOS pbpaste).");
+// Neon's dialog sometimes copies "psql 'postgresql://…'" or an env line; pull out just the URL.
+const findUrl = (s) => s.match(/postgres(?:ql)?:\/\/[^\s'"]+/);
+
+/** Reads a line from the terminal without echoing it, so the password doesn't end up on screen. */
+async function promptHidden(question) {
+  const { createInterface } = await import("node:readline");
+  const rl = createInterface({ input: process.stdin, output: process.stdout, terminal: true });
+  rl._writeToOutput = (s) => {
+    if (s.startsWith(question)) process.stdout.write(s);
+  };
+  const answer = await new Promise((resolve) => rl.question(question, resolve));
+  rl.close();
+  process.stdout.write("\n");
+  return answer;
 }
 
-// Neon's dialog sometimes copies "psql 'postgresql://…'" or an env line; pull out just the URL.
-const match = raw.match(/postgres(?:ql)?:\/\/[^\s'"]+/);
-if (!match) fail("The clipboard doesn't contain a postgres:// connection string. Copy it from Neon → Connect and try again.");
+let raw = process.argv[2] ?? "";
+if (!raw) {
+  try {
+    raw = execSync("pbpaste", { encoding: "utf8" });
+  } catch {
+    raw = "";
+  }
+}
+if (!findUrl(raw)) {
+  if (!process.stdin.isTTY) fail("No postgres:// connection string on the clipboard. Copy it from Neon → Connect and try again.");
+  console.log("No connection string found on the clipboard.");
+  raw = await promptHidden("Paste the Neon connection string (input hidden) and press Enter: ");
+}
+const match = findUrl(raw);
+if (!match) fail("That isn't a postgres:// connection string. Copy it from Neon → Connect and try again.");
 
 let url;
 try {
