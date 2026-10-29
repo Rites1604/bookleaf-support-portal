@@ -6,7 +6,14 @@ import { classifyTicket } from "@/server/ai/classifier";
 import { draftCacheKey, generateDraft } from "@/server/ai/drafter";
 import { aiEnabled } from "@/server/ai/client";
 import type { DraftContext } from "@/server/ai/prompts/draft";
-import type { Category } from "@/lib/domain";
+import { inr, isInProduction, royaltyFacts, type Category, type RoyaltyFacts } from "@/lib/domain";
+
+function payoutSummary(f: RoyaltyFacts): string {
+  if (f.pending === 0) return "Nothing pending; all royalties paid.";
+  if (f.belowThreshold) return `${inr(f.pending)} pending, below the ₹1,000 payout threshold (rolls over).`;
+  if (f.likelyOverdue) return `${inr(f.pending)} pending and OVERDUE under the quarterly + 45-day policy${f.neverPaid ? " (never paid)" : ""}.`;
+  return `${inr(f.pending)} pending, due by ${f.nextPayoutBy}; not yet overdue.`;
+}
 import type {
   CreateMessageInput,
   CreateTicketInput,
@@ -109,14 +116,16 @@ export async function createTicket(session: Session, input: CreateTicketInput) {
  * or fails because of, the AI provider. Labels an admin already set are left alone.
  */
 export async function classifyAndStore(ticketId: string, opts: { force?: boolean } = {}) {
-  const ticket = await prisma.ticket.findUnique({
-    where: { id: ticketId },
-    include: { book: { select: { title: true, status: true } } },
-  });
+  const ticket = await prisma.ticket.findUnique({ where: { id: ticketId }, include: { book: true } });
   if (!ticket) return null;
 
+  const b = ticket.book;
   const { source, result } = await classifyTicket(
-    { subject: ticket.subject, description: ticket.description, book: ticket.book },
+    {
+      subject: ticket.subject,
+      description: ticket.description,
+      book: b && { title: b.title, status: b.status, payout: isInProduction(b.status) ? undefined : payoutSummary(royaltyFacts(b)) },
+    },
     ticket.id,
   );
 

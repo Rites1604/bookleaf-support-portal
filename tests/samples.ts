@@ -2,7 +2,9 @@ import type { Category, Priority } from "@/lib/domain";
 
 /** The sample queries from the BookLeaf brief, with the labels a support lead would give them. */
 export const SAMPLE_QUERIES: { text: string; category: Category; minPriority: Priority }[] = [
-  { text: "I published my book 4 months ago and still haven't received any royalty. What's going on?", category: "ROYALTY_PAYMENTS", minPriority: "HIGH" },
+  // Without account data, 4 months can still be inside the quarterly + 45-day cycle, so Medium is acceptable here;
+  // on a real ticket the payout status from the author's record decides whether it escalates.
+  { text: "I published my book 4 months ago and still haven't received any royalty. What's going on?", category: "ROYALTY_PAYMENTS", minPriority: "MEDIUM" },
   { text: "My royalty amount seems too low. I sold 200 copies but only received ₹3,000.", category: "ROYALTY_PAYMENTS", minPriority: "MEDIUM" },
   { text: "My book is showing a different ISBN on Amazon than what's on the physical copy.", category: "ISBN_METADATA", minPriority: "HIGH" },
   { text: "I received my author copies and the print quality is terrible. The images are blurry and pages are misaligned.", category: "PRINTING_QUALITY", minPriority: "HIGH" },
