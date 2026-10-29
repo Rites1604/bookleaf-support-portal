@@ -173,3 +173,4 @@ The app is set up for **Vercel + Neon** (any Node host with Postgres works):
 - Classification in `after()` has no retry queue. A durable job queue (or a sweep that re-classifies `PENDING`/`FALLBACK` tickets) would make it fully reliable.
 - No email notifications to authors on reply yet.
 - No end-to-end browser tests; coverage is unit tests plus the manual checks above.
+- On Next.js 15.5 (latest patch). `npm audit` still lists a PostCSS advisory for the copy bundled inside Next; it only processes this app's own CSS at build time, and the fix requires the Next 16 major upgrade.

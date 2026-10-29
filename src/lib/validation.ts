@@ -3,7 +3,7 @@ import { CATEGORIES, PRIORITIES, STATUSES } from "./domain";
 
 export const loginSchema = z.object({
   email: z.string().trim().toLowerCase().email("Enter a valid email address"),
-  password: z.string().min(1, "Password is required"),
+  password: z.string({ error: "Password is required" }).min(1, "Password is required"),
 });
 
 export const createTicketSchema = z.object({
