@@ -17,7 +17,7 @@ const CATEGORY_RULES: [Category, RegExp][] = [
 ];
 
 const CRITICAL = /legal|lawyer|fraud|scam|police|consumer court|\b(6|six|7|seven|8|eight|9|nine|10|ten|12|twelve) months\b|never (been )?paid|wrong book linked|duplicate isbn/i;
-const HIGH = /\b(3|three|4|four|5|five) months\b|urgent|asap|immediately|not received|haven'?t received|wrong isbn|different isbn|terrible|unacceptable|launch|event/i;
+const HIGH = /currently unavailable|\b(3|three|4|four|5|five) months\b|urgent|asap|immediately|not received|haven'?t received|wrong isbn|different isbn|terrible|unacceptable|launch|event/i;
 const LOW = /\bbio\b|biography|how (do|can) i|can i|is it possible|question|curious|update (my|the) description/i;
 
 export function fallbackClassify(text: string): { category: Category; priority: Priority } {
