@@ -3,6 +3,7 @@
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { api, ApiClientError } from "@/lib/api";
+import { Logo } from "@/components/Logo";
 
 // Shown on the login page because this is a demo build reviewers need to get into quickly.
 const DEMO_ACCOUNTS = [
@@ -36,10 +37,11 @@ function LoginForm() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
+    // Soft pink wash like the bookleafpub.com hero.
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-brand-50 via-white to-brand-100 px-4">
       <div className="w-full max-w-sm">
-        <h1 className="text-2xl font-semibold text-teal-800">BookLeaf</h1>
-        <p className="mb-6 text-sm text-slate-500">Author Support Portal</p>
+        <Logo size={44} />
+        <h1 className="mb-6 mt-5 text-2xl font-light text-ink">Author Support Portal</h1>
         <form onSubmit={submit} className="card space-y-4 p-6">
           <div>
             <label className="label" htmlFor="email">Email</label>
@@ -58,7 +60,7 @@ function LoginForm() {
           <ul className="space-y-1">
             {DEMO_ACCOUNTS.map((a) => (
               <li key={a.email}>
-                <button type="button" className="text-left text-teal-700 hover:underline" onClick={() => setEmail(a.email)}>
+                <button type="button" className="text-left text-brand-700 hover:underline" onClick={() => setEmail(a.email)}>
                   {a.label}
                 </button>
               </li>

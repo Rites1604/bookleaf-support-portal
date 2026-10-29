@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Nunito_Sans } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+// Closest free match to the Avenir face used on bookleafpub.com.
+const nunito = Nunito_Sans({ subsets: ["latin"], weight: ["300", "400", "600", "700"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "BookLeaf Author Support",
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={inter.variable}>{children}</body>
+      <body className={`${nunito.variable} font-sans`}>{children}</body>
     </html>
   );
 }

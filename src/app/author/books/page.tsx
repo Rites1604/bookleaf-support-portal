@@ -49,7 +49,7 @@ function Stat({ label, value, highlight }: { label: string; value: string; highl
   return (
     <div className="card p-4">
       <p className="text-xs text-slate-500">{label}</p>
-      <p className={`mt-1 text-lg font-semibold ${highlight ? "text-teal-700" : ""}`}>{value}</p>
+      <p className={`mt-1 text-lg font-semibold ${highlight ? "font-bold text-ink" : ""}`}>{value}</p>
     </div>
   );
 }
@@ -104,7 +104,7 @@ function PayoutNote({ r }: { r: NonNullable<BookDto["royalty"]> }) {
       </p>
     );
   return (
-    <p className={`mt-4 rounded-md px-3 py-2 text-sm ${r.likelyOverdue ? "bg-amber-50 text-amber-800" : "bg-teal-50 text-teal-800"}`}>
+    <p className={`mt-4 rounded-md px-3 py-2 text-sm ${r.likelyOverdue ? "bg-amber-50 text-amber-800" : "bg-brand-50 text-brand-800"}`}>
       {inr(r.pending)} is due in the next quarterly payout, by {fmtDate(r.nextPayoutBy)}.
       {r.likelyOverdue && " This looks later than our usual cycle. If you haven't heard from us, raise a ticket and we'll check it within 48 hours."}
     </p>
@@ -121,7 +121,7 @@ function ProductionCard({ book }: { book: BookDto }) {
           <li key={s} className="flex items-center">
             <span
               className={`rounded-full px-2.5 py-1 ${
-                i < current ? "bg-teal-100 text-teal-800" : i === current ? "bg-amber-500 font-semibold text-white" : "bg-slate-100 text-slate-400"
+                i < current ? "bg-brand-100 text-brand-800" : i === current ? "bg-amber-500 font-semibold text-white" : "bg-slate-100 text-slate-400"
               }`}
             >
               {s}

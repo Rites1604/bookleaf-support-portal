@@ -58,7 +58,7 @@ export default function AdminTicketPage({ params }: { params: Promise<{ id: stri
 
   return (
     <div className="space-y-4">
-      <Link href="/admin/tickets" className="text-sm text-teal-700 hover:underline">← Queue</Link>
+      <Link href="/admin/tickets" className="text-sm text-brand-700 hover:underline">← Queue</Link>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-xl font-semibold">{ticket.subject}</h1>
@@ -104,13 +104,13 @@ export default function AdminTicketPage({ params }: { params: Promise<{ id: stri
             <div className="flex items-center justify-between text-sm">
               <span className="text-slate-600">Assignee: {ticket.assignee?.name ?? "Unassigned"}</span>
               {ticket.assignee ? (
-                <button className="text-xs text-teal-700 hover:underline" onClick={() => patch({ assigneeId: null })}>Unassign</button>
+                <button className="text-xs text-brand-700 hover:underline" onClick={() => patch({ assigneeId: null })}>Unassign</button>
               ) : (
                 <button className="btn-secondary" onClick={() => patch({ assigneeId: "me" })}>Assign to me</button>
               )}
             </div>
             {(ticket.categorySource === "FALLBACK" || ticket.prioritySource === "FALLBACK") && (
-              <button className="text-xs text-teal-700 hover:underline" onClick={reclassify}>Re-run AI classification</button>
+              <button className="text-xs text-brand-700 hover:underline" onClick={reclassify}>Re-run AI classification</button>
             )}
           </section>
 
@@ -234,7 +234,7 @@ function Composer({ ticket, onSent, onStatus }: { ticket: TicketDto; onSent: () 
   return (
     <div className="card p-4">
       <div className="mb-3 flex items-center gap-1 border-b border-slate-100 pb-3 text-sm">
-        <button className={`rounded px-3 py-1 ${mode === "reply" ? "bg-teal-50 font-medium text-teal-800" : "text-slate-600"}`} onClick={() => setMode("reply")}>
+        <button className={`rounded px-3 py-1 ${mode === "reply" ? "bg-brand-50 font-medium text-brand-800" : "text-slate-600"}`} onClick={() => setMode("reply")}>
           Reply to author
         </button>
         <button className={`rounded px-3 py-1 ${mode === "note" ? "bg-yellow-50 font-medium text-yellow-800" : "text-slate-600"}`} onClick={() => setMode("note")}>
@@ -249,7 +249,7 @@ function Composer({ ticket, onSent, onStatus }: { ticket: TicketDto; onSent: () 
                 {draft.draft.cached ? " · cached" : ""}
               </span>
             )}
-            <button className="text-teal-700 hover:underline disabled:opacity-50" disabled={drafting || ticket.category === "UNCLASSIFIED"} onClick={() => fetchDraft(true)}>
+            <button className="text-brand-700 hover:underline disabled:opacity-50" disabled={drafting || ticket.category === "UNCLASSIFIED"} onClick={() => fetchDraft(true)}>
               {draft?.status === "ready" ? "Regenerate" : "Draft with AI"}
             </button>
           </div>

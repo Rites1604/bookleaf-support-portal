@@ -34,7 +34,7 @@ function MessageBubble({ m, viewer }: { m: MessageDto; viewer: "AUTHOR" | "ADMIN
 
 const TONES = {
   author: "bg-white border-slate-200",
-  support: "bg-teal-50 border-teal-200",
+  support: "bg-brand-50 border-brand-200",
   internal: "bg-yellow-50 border-yellow-300 border-dashed",
 };
 

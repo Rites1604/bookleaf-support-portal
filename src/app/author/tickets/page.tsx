@@ -35,7 +35,7 @@ export default function MyTicketsPage() {
         <p className="text-sm text-slate-500">Loading…</p>
       ) : tickets.length === 0 ? (
         <EmptyState title="You haven't raised any tickets">
-          If something isn’t right with a book, a payout or your account, <Link href="/author/tickets/new" className="text-teal-700 underline">let us know</Link>.
+          If something isn’t right with a book, a payout or your account, <Link href="/author/tickets/new" className="text-brand-700 underline">let us know</Link>.
         </EmptyState>
       ) : (
         <ul className="card divide-y divide-slate-100">
@@ -45,7 +45,7 @@ export default function MyTicketsPage() {
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-medium">
                     {t.subject}
-                    {updated.has(t.id) && <span className="ml-2 rounded bg-teal-600 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-white">Updated</span>}
+                    {updated.has(t.id) && <span className="ml-2 rounded bg-brand-600 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-white">Updated</span>}
                   </p>
                   <p className="text-xs text-slate-500">
                     {t.book?.title ?? "General / Account"} · opened {timeAgo(t.createdAt)} · {t._count?.messages ?? 0} repl{t._count?.messages === 1 ? "y" : "ies"}

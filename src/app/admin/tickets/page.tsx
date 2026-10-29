@@ -108,10 +108,10 @@ export default function TicketQueuePage() {
               {tickets.map((t) => (
                 <tr key={t.id} className={`hover:bg-slate-50 ${t.priority === "CRITICAL" && t.status !== "RESOLVED" && t.status !== "CLOSED" ? "bg-red-50/40" : ""}`}>
                   <td className="max-w-md px-4 py-3">
-                    <Link href={`/admin/tickets/${t.id}`} className="font-medium hover:text-teal-700">
+                    <Link href={`/admin/tickets/${t.id}`} className="font-medium hover:text-brand-700">
                       {t.subject}
                     </Link>
-                    {fresh.has(t.id) && <span className="ml-2 h-2 w-2 rounded-full bg-teal-500 align-middle inline-block" title="Updated since you opened the queue" />}
+                    {fresh.has(t.id) && <span className="ml-2 h-2 w-2 rounded-full bg-brand-500 align-middle inline-block" title="Updated since you opened the queue" />}
                     <p className="truncate text-xs text-slate-500">
                       {t.author.user.name} · {t.book?.title ?? "Account level"}
                     </p>
@@ -140,7 +140,7 @@ function QuickFilter({ label, active, onClick, tone }: { label: string; active: 
   return (
     <button
       onClick={onClick}
-      className={`rounded-full border px-3 py-1 ${active ? "border-teal-600 bg-teal-50 text-teal-800" : "border-slate-300 bg-white text-slate-600 hover:bg-slate-50"} ${tone === "red" && !active ? "text-red-700" : ""}`}
+      className={`rounded-full border px-3 py-1 ${active ? "border-brand-600 bg-brand-50 text-brand-800" : "border-slate-300 bg-white text-slate-600 hover:bg-slate-50"} ${tone === "red" && !active ? "text-red-700" : ""}`}
     >
       {label}
     </button>

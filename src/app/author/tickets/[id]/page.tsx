@@ -45,7 +45,7 @@ export default function AuthorTicketPage({ params }: { params: Promise<{ id: str
   const awaitingReply = !ticket.messages?.length;
   return (
     <div className="mx-auto max-w-3xl space-y-5">
-      <Link href="/author/tickets" className="text-sm text-teal-700 hover:underline">← All tickets</Link>
+      <Link href="/author/tickets" className="text-sm text-brand-700 hover:underline">← All tickets</Link>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-xl font-semibold">{ticket.subject}</h1>
@@ -69,7 +69,7 @@ export default function AuthorTicketPage({ params }: { params: Promise<{ id: str
 
       {ticket.status === "CLOSED" ? (
         <p className="text-sm text-slate-500">
-          This ticket is closed. <Link href="/author/tickets/new" className="text-teal-700 underline">Raise a new ticket</Link> if you need more help.
+          This ticket is closed. <Link href="/author/tickets/new" className="text-brand-700 underline">Raise a new ticket</Link> if you need more help.
         </p>
       ) : (
         <form onSubmit={send} className="card space-y-3 p-4">
