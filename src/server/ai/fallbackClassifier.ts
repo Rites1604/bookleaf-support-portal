@@ -8,7 +8,7 @@ import type { Category, Priority } from "@/lib/domain";
  */
 const CATEGORY_RULES: [Category, RegExp][] = [
   // Account-level requests mention platforms ("my bio on Amazon") but are not distribution problems.
-  ["GENERAL_INQUIRY", /author bio|\bbio\b|biography|profile photo|change (my )?(email|password|bank)/i],
+  ["GENERAL_INQUIRY", /author bio|\bbio\b|biography|profile photo|change (my )?(email|password|bank)|(update|change|edit) (the |my )?(book )?description/i],
   ["ISBN_METADATA", /\bisbn\b|metadata|wrong (book|title|author)|barcode|imprint/i],
   ["ROYALTY_PAYMENTS", /royalt|payout|payment|paid|bank|earning|₹|\brs\.?\b|money|invoice/i],
   ["PRINTING_QUALITY", /print(ing)? quality|misprint|blurr|binding|pages? (are )?(missing|misaligned|torn)|defect|colou?r|author cop/i],
