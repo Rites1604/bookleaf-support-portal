@@ -22,6 +22,8 @@ Set the repository visibility to whatever BookLeaf confirms (the HR email says p
 
 ## 3. Load the schema and demo data (from your machine, once)
 
+Shortcut: copy either Neon connection string, then run `npm run db:save-neon`. It writes both URLs into `.env` (keeping the old file as `.env.backup`), after which `npx prisma migrate deploy && npm run db:seed` is all you need. Or pass the URLs inline:
+
 ```bash
 DATABASE_URL="<pooled url>" DIRECT_URL="<direct url>" npx prisma migrate deploy
 ```
