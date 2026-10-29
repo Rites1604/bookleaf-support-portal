@@ -41,3 +41,6 @@ yarn-error.log*
 next-env.d.ts
 
 !.env.example
+
+# Vercel env import file (contains secrets)
+vercel-production.env
