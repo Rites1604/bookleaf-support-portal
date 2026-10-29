@@ -21,7 +21,7 @@ export function AppShell({ nav, userName, portal, children }: { nav: NavItem[]; 
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3">
           <div className="flex items-center gap-3">
-            <Logo height={40} />
+            <Logo size={30} />
             <span className="rounded-full bg-brand-50 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-brand-700">{portal}</span>
           </div>
           <nav className="flex gap-1">

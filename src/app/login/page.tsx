@@ -40,9 +40,7 @@ function LoginForm() {
     // Soft pink wash like the bookleafpub.com hero.
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-brand-50 via-white to-brand-100 px-4">
       <div className="w-full max-w-sm">
-        <div className="inline-block rounded-lg bg-white px-3 py-2 shadow-sm">
-          <Logo height={81} />
-        </div>
+        <Logo size={44} />
         <h1 className="mb-6 mt-5 text-2xl font-light text-ink">Author Support Portal</h1>
         <form onSubmit={submit} className="card space-y-4 p-6">
           <div>
